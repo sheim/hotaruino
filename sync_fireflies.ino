@@ -1,25 +1,43 @@
-int phi = 0; //current phase of the firefly cycle
-int x = 0; //state x --> x=f(phi) 
-int epsilon = 0.2 //coupling strength, the amount "x" gets lifted up if a flsh is received
+/*
+the variables a, b, c and d are for the characteristics of f(phiRaw/phiMax)
+*/
 
-int frequency = 1 //in Hz, the maximum timer value (phi) is calculated out of the frequency
+#define a 0.167
+#define b 1.025
+#define c 0.00251
+#define d 0.995
 
-int trigger_threshold = 0 //threshold after that entrainment could occur --> trigger_threshold = x_max - epsilon
-int ambient_treshold = 0 //the IR-Receiver has an internal pull-up resistor, so ambient_treshold has to be smaller if a flash is received 
+#define f_CPU 16000000 //clock frequency
+#define prescaler 1024 //the prescaler for Timer1 (it's set in the TCCR1B register)
+#define phiRaw TCNT1 //the value of the Timer1 is used as the phase variable phi
+#define flashLength 200 //in ms
 
-void void setup()
+
+double x = 0; //state x --> x=f(phiRaw/phiMax) 
+double epsilon = 0.2 //coupling strength, the amount "x" gets lifted up if a flsh is received
+
+double flashInterval = 3 //in s, the maximum timer value (phiMax) is calculated out of the the interval between two flashes
+int phiMax = 0; //compare value for phiRaw, the maximum value Timer1 counts to
+
+void setup()
 {
 	/*
 	Initialize Timer1:
 	Timer1 is used to keep track of the flashing rythm if the firefly is not entrained/triggered for another one.
-	Therefor the Timer1 is driven in the "Normal-Mode". That means that it only counts up. The counting value is in the register TCNT1.
-	That register can be compared to the variable "flashing_threshold" to figure out when to flash.
+	Therefor the Timer1 is driven in the "Normal-Mode". That means that it only counts up. The counting value is in the register TCNT1 or "phiRaw".
+	That register can be compared to the variable "phiMax" to figure out when to flash. The figure "phiMax" can be calculated like that:
+
+	phiMax = (f_CPU * flashInterval) / prescaler
+
+	These values are all defined above!
 	*/
 
 	TCCR1A = 0; //for Normal-Mode is no Bit in the TCCR1A register necessary
 	TCCR1B = 0b00000101; //the last three bits are to set the prescaler for Timer1. For a prescaler of 1024 (the Timer1 increments it's value at every 1024th clock cycle)
 	TIMSK1 = 0; //to ensure that no interrupt request is set
 	TCNT1 = 0; //initialize the value of Timer1 with 0 so that it starts from bottom to count up
+
+	phiMax = (f_CPU * flashInterval) / prescaler; //calculation of "phiMax"
 
 	/*
 	Initialize Timer2:
@@ -44,7 +62,7 @@ void void setup()
 	The IR-LED have to be connected to PB3 (OC2A, Digital Pin 11) like it was mentioned above. The Pin has to be declared as an output. If it's not it won't toggle.
 
 	The visible LED is connected to the PB0 (Digital Pin 8). It has to be an Output.
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	The IR-Receiver has an internal filter circuit that filters out any frequency than 38kHz. It also filters out IR light from DC light sources.
 	Thats the reason why the IR-LED has to flash with this certain frequency. That means that the Output of the receiver (witch is internally pulled high) is
@@ -58,7 +76,7 @@ void void setup()
 }
 
 
-void void loop()
+void loop()
 {
 	
 }
