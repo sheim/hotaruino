@@ -24,13 +24,13 @@ void void setup()
 	/*
 	Initialize Timer2:
 	Timer2 is used to modulate the required frequency (~38kHz) for the IR-Receiver. Timer2 is driven in CTC-Mode (Clear Timer on Compare-Match-Mode)
-	with the additional setting that if the compare-match is reached the pin OC2A (PB3, Digital Pin 11) is toggled.
+	with the additional setting that if the compare-match is reached the pin OC2A (PB3, Digital Pin 11 --> the IR-LED have to be connected to that pin) is toggled.
 	The compare value is stored in the register OCR2A. 
 	To calculate the value that have to be stored in OCR2A we have to know witch prescaler N we are using and we need to know the clock frequency f_clk 
 	and the frequency f of our signal:
 
 	OCR2A = (f_clk/(2*N*f))-1
-
+	
 	*/
 
 	TCCR2A = 0b01000010 //the first "1" chooses the Mode to toggle pin OC2A on compare match. The second "1" is for choosing CTC-Mode
@@ -38,6 +38,23 @@ void void setup()
 	TIMSK2 = 0 //to ensure that no interrupt is set
 	OCR2A = 210 //initialize the OCR2A register with the calculated value
 	TCNT2 = 0 //initialize the value of the Timer2 so that it start counting from bottom
+
+	/*
+	Initialize required pins:
+	The IR-LED have to be connected to PB3 (OC2A, Digital Pin 11) like it was mentioned above. The Pin has to be declared as an output. If it's not it won't toggle.
+
+	The visible LED is connected to the PB0 (Digital Pin 8). It has to be an Output.
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	The IR-Receiver has an internal filter circuit that filters out any frequency than 38kHz. It also filters out IR light from DC light sources.
+	Thats the reason why the IR-LED has to flash with this certain frequency. That means that the Output of the receiver (witch is internally pulled high) is
+	not influenced from ambient light. It in not necessary to take a sample. Thats why the output of the IR-Receiver is connected to PB1 (Digital Pin 9).
+	This Pin has to be an Input. And for later: we have to wait until the Pin is Low!!!
+	*/
+
+	DDRB |= (1 << DDB0) | (1 << DDB3); //declaring PB0 (Digital Pin 9) and PB3 (OC2A, Digital Pin 11) as Output
+	DDRB &= ~(1 << DDB1); //declaring PB1 (Digital Pin 9) as an Input
+
 }
 
 
