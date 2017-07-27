@@ -14,10 +14,36 @@ the variables a, b, c and d are for the characteristics of f(phiRaw/phiMax)
 
 
 double x = 0; //state x --> x=f(phiRaw/phiMax) 
+char xReset = 1; //the flash occurs after "x" exceeds "xReset"
 double epsilon = 0.2 //coupling strength, the amount "x" gets lifted up if a flsh is received
 
 double flashInterval = 3 //in s, the maximum timer value (phiMax) is calculated out of the the interval between two flashes
 int phiMax = 0; //compare value for phiRaw, the maximum value Timer1 counts to
+
+/*
+The function "flash" handles the whole process if "x" exceeds "xReset". At first we make two new variables to measure the time when the the function is entered.
+The other variable stores the current time. Those are necessary to maxe a visible flash. The length of the flash is defined in "flashLength". After that it is
+necessary to startup Timer2. That happens if the prescaler is set new. In the end it is again necessary to disable the timer (clear the prescaler).
+If this is not done the IR-LED keep on flashing! 
+
+*/
+
+void flash()
+{
+	int startFlash = millis();
+	int currentTime = 0;
+
+	TCCR2B = 0b00000001; //setting the prescaler at "1"
+	PORTB |= (1 << PB0); //light-up the visible LED
+
+	//stretch the time in the loop to "flashLength"
+	while((currentTime - startFlash) <= flashLength){
+	    currentTime = millis();
+	}
+
+	TCCR2B = 0; //clear the prescaler to stop flashing the IR-LED flashing
+	PORTB &= ~(1 << PB0); //kill the visible LED
+}
 
 void setup()
 {
@@ -70,7 +96,7 @@ void setup()
 	This Pin has to be an Input. And for later: we have to wait until the Pin is Low!!!
 	*/
 
-	DDRB |= (1 << DDB0) | (1 << DDB3); //declaring PB0 (Digital Pin 9) and PB3 (OC2A, Digital Pin 11) as Output
+	DDRB |= (1 << DDB0) | (1 << DDB3); //declaring PB0 (Digital Pin 8) and PB3 (OC2A, Digital Pin 11) as Output
 	DDRB &= ~(1 << DDB1); //declaring PB1 (Digital Pin 9) as an Input
 
 }
