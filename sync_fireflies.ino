@@ -19,6 +19,7 @@ double epsilon = 0.2 //coupling strength, the amount "x" gets lifted up if a fls
 
 double flashInterval = 3 //in s, the maximum timer value (phiMax) is calculated out of the the interval between two flashes
 int phiMax = 0; //compare value for phiRaw, the maximum value Timer1 counts to
+char flashReceive = HIGH; //holds the value for PB1
 
 /*
 The function "flash" handles the whole process if "x" exceeds "xReset". At first we make two new variables to measure the time when the the function is entered.
@@ -63,7 +64,7 @@ void setup()
 	TIMSK1 = 0; //to ensure that no interrupt request is set
 	TCNT1 = 0; //initialize the value of Timer1 with 0 so that it starts from bottom to count up
 
-	phiMax = (f_CPU * flashInterval) / prescaler; //calculation of "phiMax"
+	phiMax = (int)(f_CPU * flashInterval) / prescaler; //calculation of "phiMax"
 
 	/*
 	Initialize Timer2:
