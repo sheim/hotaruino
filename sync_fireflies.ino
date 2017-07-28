@@ -109,8 +109,14 @@ void setup()
 	DDRB |= (1 << DDB0) | (1 << DDB3); //declaring PB0 (Digital Pin 8) and PB3 (OC2A, Digital Pin 11) as Output
 	DDRB &= ~(1 << DDB1); //declaring PB1 (Digital Pin 9) as an Input
 
-}
+	/*
+	The variables "epsilon" and "flashInterval" should be adjustable at first on the breadboard with some potentiometers. Those are hooked up to the Pins
+	PC0 (Analog Pin A0) and PC1 (Analog Pin A1). Hence they have to be inputs
+	*/
 
+	DDRC &= ~(1 << DDC0); //declaring PC0 (Analog Pin A0) as an Input
+	DDRC &= ~(1 << DDC1); //declaring PC1 (Analog Pin A1) as an Input
+}
 
 void loop()
 {
