@@ -46,6 +46,15 @@ void flash()
 	PORTB &= ~(1 << PB0); //kill the visible LED
 }
 
+/*
+The "floatMap"-function converts a figure from one range to another. It's return value is a floating point number.
+*/
+float mapfloat(short x, short in_min, short in_max, short out_min, short out_max)
+{
+ return (float)(x - in_min) * (out_max - out_min) / (float)(in_max - in_min) + out_min;
+}
+
+
 void setup()
 {
 	/*
