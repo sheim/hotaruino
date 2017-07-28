@@ -21,12 +21,6 @@ double flashInterval = 3 //in s, the maximum timer value (phiMax) is calculated 
 int phiMax = 0; //compare value for phiRaw, the maximum value Timer1 counts to
 char flashReceive = HIGH; //holds the value for PB1
 
-int pot_epsilon_max = 0; // the "pot_..."-variables are for calibrating the potentiometers
-int pot_epsilon_min = 0;
-
-int pot_timeInterval_max = 0;
-int pot_timeInterval_min = 0;
-
 /*
 The function "flash" handles the whole process if "x" exceeds "xReset". At first we make two new variables to measure the time when the the function is entered.
 The other variable stores the current time. Those are necessary to maxe a visible flash. The length of the flash is defined in "flashLength". After that it is
@@ -58,39 +52,6 @@ The "floatMap"-function converts a figure from one range to another. It's return
 float mapfloat(short x, short in_min, short in_max, short out_min, short out_max)
 {
  return (float)(x - in_min) * (out_max - out_min) / (float)(in_max - in_min) + out_min;
-}
-
-void potCalibration()
-{
-	/*
-	Starting the calibraion of the potentiometers. To do that the potentiometer have to be tuned down to its smallest value and then tuned up to the maximum 
-	value. To stretch the length of the calibration time the "delay()"-function is used. 
-	*/
-
-	PORTB |= (1 << PB0); //light-up the visible LED to show that the calibration can start
-	delay(1000);
-	pot_epsilon_min = analogRead(A0); //read in the value of A0
-	PORTB &= ~(1 << PB0); //switch of visible LED to show that the value is saved
-	delay(100);
-	//this process runs 4 times. For each "pot_..." value once
-
-	PORTB |= (1 << PB0);
-	delay(1000);
-	pot_epsilon_max = analogRead(A0);
-	PORTB &= ~(1 <<PB0);
-	delay(100);
-
-	PORTB |= (1 << PB0);
-	delay(1000);
-	pot_timeInterval_min = analogRead(A0);
-	PORTB &= ~(1 <<PB0);
-	delay(100);
-
-	PORTB |= (1 << PB0);
-	delay(1000);
-	pot_timeinterval_max = analogRead(A0);
-	PORTB &= ~(1 <<PB0);
-	delay(100);
 }
 
 void setup()
