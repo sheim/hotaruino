@@ -141,6 +141,7 @@ void loop()
 	{
 		x += epsilon; //the current pacemaker point gets lifted about "epsilon"
 	}
+	flashReceive = HIGH; //ensure that the for the next round the flash receive is HIGH
 
 	/*
 	a firefly alone has it's own timeinterval between the the flashes. 
