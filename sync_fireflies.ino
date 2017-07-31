@@ -21,6 +21,8 @@ double flashInterval = 3; //in s, the maximum timer value (phiMax) is calculated
 int phiMax = 0; //compare value for phiRaw, the maximum value Timer1 counts to
 char flashReceive = HIGH; //holds the value for PB1
 
+int randomValue = 0; //holds later a random value for mapping noise to a "x" and the "flashInterval"
+int constFlashIntervalOffset = 0;
 /*
 The function "flash" handles the whole process if "x" exceeds "xReset". At first we make two new variables to measure the time when the the function is entered.
 The other variable stores the current time. Those are necessary to maxe a visible flash. The length of the flash is defined in "flashLength". After that it is
@@ -115,6 +117,9 @@ void setup()
 
 	DDRC &= ~(1 << DDC0); //declaring PC0 (Analog Pin A0) as an Input
 	DDRC &= ~(1 << DDC1); //declaring PC1 (Analog Pin A1) as an Input
+
+	randomValue = random(1000);
+	constFlashIntervalOffset = mapFloat(randomValue, 0, 1000, -0.05, 0.05); //calculation of the constant flashInterval offset
 }
 
 void loop()
@@ -124,7 +129,8 @@ void loop()
 	*/
 
 	epsilon = mapFloat(analogRead(A0), 0, 1023, 0.01, 0.2); //reading in the analog value on pin PC0/A0 and map that value to a value between 0.01 and 0.2
-	flashInterval = mapFloat(analogRead(A1), 0, 1023, 0.5, 4); //reading in the new "flashInterval" from PC1/A1 and map it from 500ms to 4s
+	flashInterval = mapFloat(analogRead(A1), 0, 1023, 0.5, 4) + constFlashIntervalOffset;
+	//reading in the new "flashInterval" from PC1/A1 and map it from 500ms to 4s and add the previous calculated (firefly specific) flash interval offset
 	phiMax = (int)((f_CPU * flashInterval) / prescaler); // calculate the new "phiMax" out of the new "flashInterval"
 
 	/*
@@ -159,4 +165,7 @@ void loop()
 		x = a * log(b * ((phiRaw/phiMax)+c)) + d; //"x" gets it's new value according to x = f_phi
 		//function x = f(phiRaw/phiMax) --> since the function is just on an interval between 0 and 1 it has to be normed by the maximum value "phiMax"
 	}
+	randomValue = random(1000); //taking a random value
+	x += mapFloat(randomValue, 0, 1000, -0.001, 0.001); //adding some noise to the current pacemaker point	
+	//put that random value in an range of -0.001 to 0.001 --> if the range is to big there are strong visible differneces in the frequency of the cycle!
 }
