@@ -49,7 +49,7 @@ void flash()
 /*
 The "floatMap"-function converts a figure from one range to another. It's return value is a floating point number.
 */
-float mapfloat(float x, float in_min, float in_max, float out_min, float out_max)
+float mapFloat(float x, float in_min, float in_max, float out_min, float out_max)
 {
   return (float)(x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
@@ -119,5 +119,16 @@ void setup()
 
 void loop()
 {
-	
+	/*if the current point of the pacemaker is bigger than the reset point the firefly have to flash and start it's cycle again. If x is smaller than the reset
+	point than x will get a new value according to x = f(phiRaw/phiMax)*/
+	if(x >= xReset)
+	{
+		flash(); // calling the "flash"-function
+		phiRaw = 0; //resetting "phiRaw" and "x" to start from the bottom
+		x = 0;
+	}else
+	{
+		x = a * log(b * ((phiRaw/phiMax)+c)) + d; //"x" gets it's new value according to x = f_phi
+		//function x = f(phiRaw/phiMax) --> since the function is just on an interval between 0 and 1 it has to be normed by the maximum value "phiMax"
+	}
 }
