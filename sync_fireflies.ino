@@ -86,11 +86,11 @@ void setup()
 	
 	*/
 
-	TCCR2A = 0b01000010 //the first "1" chooses the Mode to toggle pin OC2A on compare match. The second "1" is for choosing CTC-Mode
-	TCCR2B = 0 //right no the counter is disabled because there is no prescaler set. That is only necessary if a flash is required
-	TIMSK2 = 0 //to ensure that no interrupt is set
-	OCR2A = 210 //initialize the OCR2A register with the calculated value
-	TCNT2 = 0 //initialize the value of the Timer2 so that it start counting from bottom
+	TCCR2A = 0b01000010; //the first "1" chooses the Mode to toggle pin OC2A on compare match. The second "1" is for choosing CTC-Mode
+	TCCR2B = 0; //right no the counter is disabled because there is no prescaler set. That is only necessary if a flash is required
+	TIMSK2 = 0; //to ensure that no interrupt is set
+	OCR2A = 210; //initialize the OCR2A register with the calculated value
+	TCNT2 = 0; //initialize the value of the Timer2 so that it start counting from bottom
 
 	/*
 	Initialize required pins:
@@ -119,6 +119,14 @@ void setup()
 
 void loop()
 {
+	/*
+	start with checking if the potentiometers have changed
+	*/
+
+	epsilon = mapFloat(analogRead(A0), 0, 1023, 0.01, 0.2); //reading in the analog value on pin PC0/A0 and map that value to a value between 0.01 and 0.2
+	flashInterval = mapFloat(analogRead(A1), 0, 1023, 0.5, 4); //reading in the new "flashInterval" from PC1/A1 and map it from 500ms to 4s
+	phiMax = (int)((f_CPU * flashInterval) / prescaler); // calculate the new "phiMax" out of the new "flashInterval"
+
 	/*
 	If the firefly is in a group of flashing fireflies it is infuenced by the flashes of the others. By recognizing a flash from another firefly it is able
 	to phase shift it's current cycle about the coupling strength "epsilon" to the received flash. For two oczillating fireflies the model from Renato E. Mirollo
