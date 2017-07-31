@@ -2,10 +2,9 @@
 the variables a, b, c and d are for the characteristics of f(phiRaw/phiMax)
 */
 
-#define a 0.167
-#define b 1.025
-#define c 0.00251
-#define d 0.995
+#define a 1.011
+#define b 4.499
+#define c 1.011
 
 #define f_CPU 16000000 //clock frequency
 #define prescaler 1024 //the prescaler for Timer1 (it's set in the TCCR1B register)
@@ -62,7 +61,7 @@ void setup()
 	Initialize Timer1:
 	Timer1 is used to keep track of the flashing rythm if the firefly is not entrained/triggered for another one.
 	Therefor the Timer1 is driven in the "Normal-Mode". That means that it only counts up. The counting value is in the register TCNT1 or "phiRaw".
-	That register can be compared to the variable "phiMax" to figure out when to flash. The figure "phiMax" can be calculated like that:
+	That register can be compared to the variable "phiMax" to figure out when to flash. The value of "phiMax" can be calculated like that:
 
 	phiMax = (f_CPU * flashInterval) / prescaler
 
@@ -162,7 +161,7 @@ void loop()
 		x = 0;
 	}else
 	{
-		x = a * log(b * ((phiRaw/phiMax)+c)) + d; //"x" gets it's new value according to x = f_phi
+		x = -a*exp(-(b/phiMax)*phiRaw)+c; //"x" gets it's new value according to x = f_phi
 		//function x = f(phiRaw/phiMax) --> since the function is just on an interval between 0 and 1 it has to be normed by the maximum value "phiMax"
 	}
 	randomValue = random(1000); //taking a random value
