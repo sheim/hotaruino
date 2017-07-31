@@ -119,12 +119,31 @@ void setup()
 
 void loop()
 {
-	/*if the current point of the pacemaker is bigger than the reset point the firefly have to flash and start it's cycle again. If x is smaller than the reset
-	point than x will get a new value according to x = f(phiRaw/phiMax)*/
+	/*
+	If the firefly is in a group of flashing fireflies it is infuenced by the flashes of the others. By recognizing a flash from another firefly it is able
+	to phase shift it's current cycle about the coupling strength "epsilon" to the received flash. For two oczillating fireflies the model from Renato E. Mirollo
+	and Steven H. Strogatz is good so that it's sure that they synchronize. For more than two the model of John Buck is also good.
+	*/
+
+	flashReceive = PINB & (1 << PB1); //saving the state if a flash is received or not. 
+
+	//The IR-receiver has an internal pull-up resistor! So it's important to look for an LOW pin if a flash is received. 
+
+	if(flashReceive == 0)
+	{
+		x += epsilon; //the current pacemaker point gets lifted about "epsilon"
+	}
+
+	/*
+	a firefly alone has it's own timeinterval between the the flashes. 
+	If the current point of the pacemaker is bigger than the reset point the firefly have to flash and start it's cycle again. If x is smaller than the reset
+	point than x will get a new value according to x = f(phiRaw/phiMax)
+	*/
+
 	if(x >= xReset)
 	{
 		flash(); // calling the "flash"-function
-		phiRaw = 0; //resetting "phiRaw" and "x" to start from the bottom
+		phiRaw = 0; //reset of "phiRaw" and "x" to start from the bottom
 		x = 0;
 	}else
 	{
