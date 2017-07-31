@@ -15,9 +15,9 @@ the variables a, b, c and d are for the characteristics of f(phiRaw/phiMax)
 
 double x = 0; //state x --> x=f(phiRaw/phiMax) 
 char xReset = 1; //the flash occurs after "x" exceeds "xReset"
-double epsilon = 0.2 //coupling strength, the amount "x" gets lifted up if a flsh is received
+double epsilon = 0.2; //coupling strength, the amount "x" gets lifted up if a flsh is received
 
-double flashInterval = 3 //in s, the maximum timer value (phiMax) is calculated out of the the interval between two flashes --> biggest value is ~4s
+double flashInterval = 3; //in s, the maximum timer value (phiMax) is calculated out of the the interval between two flashes --> biggest value is ~4s
 int phiMax = 0; //compare value for phiRaw, the maximum value Timer1 counts to
 char flashReceive = HIGH; //holds the value for PB1
 
@@ -49,9 +49,9 @@ void flash()
 /*
 The "floatMap"-function converts a figure from one range to another. It's return value is a floating point number.
 */
-float mapfloat(short x, short in_min, short in_max, short out_min, short out_max)
+float mapfloat(float x, float in_min, float in_max, float out_min, float out_max)
 {
- return (float)(x - in_min) * (out_max - out_min) / (float)(in_max - in_min) + out_min;
+  return (float)(x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
 void setup()
