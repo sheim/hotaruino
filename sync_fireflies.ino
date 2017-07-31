@@ -17,7 +17,7 @@ char xReset = 1; //the flash occurs after "x" exceeds "xReset"
 double epsilon = 0.2; //coupling strength, the amount "x" gets lifted up if a flsh is received
 
 double flashInterval = 3; //in s, the maximum timer value (phiMax) is calculated out of the the interval between two flashes --> biggest value is ~4s
-int phiMax = 0; //compare value for phiRaw, the maximum value Timer1 counts to
+unsigned int phiMax = 0; //compare value for phiRaw, the maximum value Timer1 counts to
 char flashReceive = HIGH; //holds the value for PB1
 
 int randomValue = 0; //holds later a random value for mapping noise to a "x" and the "flashInterval"
@@ -73,7 +73,7 @@ void setup()
 	TIMSK1 = 0; //to ensure that no interrupt request is set
 	TCNT1 = 0; //initialize the value of Timer1 with 0 so that it starts from bottom to count up
 
-	phiMax = (int)(f_CPU * flashInterval) / prescaler; //calculation of "phiMax"
+	phiMax = (unsigned int)(f_CPU * flashInterval) / prescaler; //calculation of "phiMax"
 
 	/*
 	Initialize Timer2:
@@ -130,7 +130,7 @@ void loop()
 	epsilon = mapFloat(analogRead(A0), 0, 1023, 0.01, 0.2); //reading in the analog value on pin PC0/A0 and map that value to a value between 0.01 and 0.2
 	flashInterval = mapFloat(analogRead(A1), 0, 1023, 0.5, 4) + constFlashIntervalOffset;
 	//reading in the new "flashInterval" from PC1/A1 and map it from 500ms to 4s and add the previous calculated (firefly specific) flash interval offset
-	phiMax = (int)((f_CPU * flashInterval) / prescaler); // calculate the new "phiMax" out of the new "flashInterval"
+	phiMax = (unsigned int)((f_CPU * flashInterval) / prescaler); // calculate the new "phiMax" out of the new "flashInterval"
 
 	/*
 	If the firefly is in a group of flashing fireflies it is infuenced by the flashes of the others. By recognizing a flash from another firefly it is able
