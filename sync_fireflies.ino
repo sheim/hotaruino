@@ -9,7 +9,8 @@ the variables a, b, c and d are for the characteristics of f(phiRaw/phiMax)
 #define f_CPU 16000000 //clock frequency
 #define prescaler 1024 //the prescaler for Timer1 (it's set in the TCCR1B register)
 #define phiRaw TCNT1 //the value of the Timer1 is used as the phase variable phi
-#define flashLength 200 //in ms
+#define flashLength 200 //in ms --> flashing time ot the visible LED
+#define IR_flash 20 //in ms --> flashing time of the IR-LED
 
 
 double x = 0; //state x --> x=f(phiRaw/phiMax) 
@@ -39,7 +40,13 @@ void flash()
 	PORTB |= (1 << PB0); //light-up the visible LED
 
 	//stretch the time in the loop to "flashLength"
-	while((currentTime - startFlash) <= flashLength){
+	while((currentTime - startFlash) <= flashLength)
+	{
+		if((currentTime - startFlash) >= IR_flash)
+		{
+			TCCR2B = 0; //clear the prescaler to stop flashing the IR-LED flashing
+			phiRaw = 0; //clear the recent value so that it start up from bottom if it is again activated  
+		}
 	    currentTime = millis();
 	}
 
@@ -53,6 +60,17 @@ The "floatMap"-function converts a figure from one range to another. It's return
 float mapFloat(float x, float in_min, float in_max, float out_min, float out_max)
 {
   return (float)(x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+
+void Delay(int timeDelay)
+{
+	int startTime = millis();
+	int currentTime = millis();
+
+	while((currentTime - startTime) >= timeDelay)
+	{
+		currentTime = millis();
+	}
 }
 
 void setup()
@@ -166,4 +184,6 @@ void loop()
 	randomValue = random(1000); //taking a random value
 	x += mapFloat(randomValue, 0, 1000, -0.001, 0.001); //adding some noise to the current pacemaker point	
 	//put that random value in an range of -0.001 to 0.001 --> if the range is to big there are strong visible differneces in the frequency of the cycle!
+
+	Delay(20);
 }
