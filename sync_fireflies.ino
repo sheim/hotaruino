@@ -19,7 +19,10 @@ double epsilon = 0.2; //coupling strength, the amount "x" gets lifted up if a fl
 double flashInterval = 3; //in s, the maximum timer value (phiMax) is calculated out of the the interval between two flashes --> biggest value is ~4s
 unsigned int phiMax = 0; //compare value for phiRaw, the maximum value Timer1 counts to
 
-char flashReceive = HIGH; //holds the value for PB1
+char flashReceiveA = HIGH; //holds the value for PB1
+char flashReceiveB = HIGH; //holds the value for PB2
+char flashReceiveC = HIGH; //holds the value for PB4
+char flashReceiveD = HIGH; //holds the value for PB5
 
 int randomValue = 0; //holds later a random value for mapping noise to a "x" and the "flashInterval"
 double constFlashIntervalOffset = 0;
@@ -125,6 +128,11 @@ void setup()
 
 	DDRB |= (1 << DDB0) | (1 << DDB3); //declaring PB0 (Digital Pin 8) and PB3 (OC2A, Digital Pin 11) as Output
 	DDRB &= ~(1 << DDB1); //declaring PB1 (Digital Pin 9) as an Input
+	DDRB &= ~(1 << DDB2); //declaring PB2 (Digital Pin 10) as an Input
+	DDRB &= ~(1 << DDB4); //declaring PB4 (Digital Pin 12) as an Input
+	DDRB &= ~(1 << DDB5); //declaring PB5 (Digital Pin 13) as an Input
+
+	//if one Pin isn't used just pull it up to Vss or remove the the variable that holds the value for the unused pin from the argument of the if-sentence below!
 
 	/*
 	The variables "epsilon" and "flashInterval" should be adjustable at first on the breadboard with some potentiometers. Those are hooked up to the Pins
@@ -150,22 +158,6 @@ void loop()
 	phiMax = (unsigned int)((f_CPU * flashInterval) / prescaler); // calculate the new "phiMax" out of the new "flashInterval"
 
 	/*
-	If the firefly is in a group of flashing fireflies it is infuenced by the flashes of the others. By recognizing a flash from another firefly it is able
-	to phase shift it's current cycle about the coupling strength "epsilon" to the received flash. For two oczillating fireflies the model from Renato E. Mirollo
-	and Steven H. Strogatz is good so that it's sure that they synchronize. For more than two the model of John Buck is also good.
-	*/
-
-	flashReceive = PINB & (1 << PB1); //saving the state if a flash is received or not. 
-
-	//The IR-receiver has an internal pull-up resistor! So it's important to look for an LOW pin if a flash is received. 
-
-	if(flashReceive == 0)
-	{
-		x += epsilon; //the current pacemaker point gets lifted about "epsilon"
-	}
-	flashReceive = HIGH; //ensure that the for the next round the flash receive is HIGH
-
-	/*
 	a firefly alone has it's own timeinterval between the the flashes. 
 	If the current point of the pacemaker is bigger than the reset point the firefly have to flash and start it's cycle again. If x is smaller than the reset
 	point than x will get a new value according to x = f(phiRaw/phiMax)
@@ -185,5 +177,28 @@ void loop()
 	x += mapFloat(randomValue, 0, 1000, -0.001, 0.001); //adding some noise to the current pacemaker point	
 	//put that random value in an range of -0.001 to 0.001 --> if the range is to big there are strong visible differneces in the frequency of the cycle!
 
-	Delay(20);
+	/*
+	If the firefly is in a group of flashing fireflies it is infuenced by the flashes of the others. By recognizing a flash from another firefly it is able
+	to phase shift it's current cycle about the coupling strength "epsilon" to the received flash. For two oczillating fireflies the model from Renato E. Mirollo
+	and Steven H. Strogatz is good so that it's sure that they synchronize. For more than two the model of John Buck is also good.
+	*/
+
+	flashReceiveA = PINB & (1 << PB1); //saving the state if a flash is received or not for bin PB1.
+	flashReceiveB = PINB & (1 << PB2); //saving the state if a flash is received or not for bin PB2.
+	flashReceiveC = PINB & (1 << PB4); //saving the state if a flash is received or not for bin PB4.
+	flashReceiveD = PINB & (1 << PB5); //saving the state if a flash is received or not for bin PB5.
+
+	//The IR-receiver has an internal pull-up resistor! So it's important to look for an LOW pin if a flash is received. 
+
+	if((flashReceiveA == 0) || (flashReceiveB == 0) || (flashReceiveC == 0) || (flashReceiveD == 0)) 
+	{
+		x += epsilon; //the current pacemaker point gets lifted about "epsilon"
+	}
+
+	flashReceiveA = HIGH; //ensure that the for the next round the flash receive is HIGH
+	flashReceiveB = HIGH;
+	flashReceiveC = HIGH;
+	flashReceiveD = HIGH;
+
+	Delay(IR_flash); //ensures that only one flash is recognized per cycle
 }
