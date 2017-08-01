@@ -71,10 +71,9 @@ void setup()
 	TCCR1A = 0; //for Normal-Mode is no Bit in the TCCR1A register necessary
 	TCCR1B = 0b00000101; //the last three bits are to set the prescaler for Timer1. For a prescaler of 1024 (the Timer1 increments it's value at every 1024th clock cycle)
 	TIMSK1 = 0; //to ensure that no interrupt request is set
-	TCNT1 = 0; //initialize the value of Timer1 with 0 so that it starts from bottom to count up
 
 	phiMax = (unsigned int)(f_CPU * flashInterval) / prescaler; //calculation of "phiMax"
-
+	TCNT1 = random(phiMax); //initialize the pacemaker with a random value
 	/*
 	Initialize Timer2:
 	Timer2 is used to modulate the required frequency (~38kHz) for the IR-Receiver. Timer2 is driven in CTC-Mode (Clear Timer on Compare-Match-Mode)
