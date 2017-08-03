@@ -53,7 +53,7 @@ void flash()
 		But the flash length of the IR-LED can't just be made smaller. It has to be at least 10ms because if the flash length is smaller it's not 
 		sure if the others recognize the flash!
 		*/
-		if((current_time - start_tlash) >= IR_FLASH_LENGTH)
+		if((current_time - start_flash) >= IR_FLASH_LENGTH)
 		{
 			TCCR2B = 0; //clear the prescaler to stop flashing the IR-LED flashing
 			PHI_RAW = 0; //clear the recent value so that it start up from bottom if it is again activated  
@@ -96,7 +96,7 @@ void setup()
 	Therefor the Timer1 is driven in the "Normal-Mode". That means that it only counts up. The counting value is in the register TCNT1 or "phiRaw".
 	That register can be compared to the variable "phi_max" to figure out when to flash. The value of "phi_max" can be calculated like that:
 
-	phi_max = (f_CPU * flashInterval) / prescaler
+	phi_max = (F_CPU * flashInterval) / prescaler
 
 	These values are all defined above!
 	*/
@@ -105,7 +105,7 @@ void setup()
 	TCCR1B = 0b00000101; //the last three bits are to set the prescaler for Timer1. For a prescaler of 1024 (the Timer1 increments it's value at every 1024th clock cycle)
 	TIMSK1 = 0; //to ensure that no interrupt request is set
 
-	phi_maxi = (unsigned int)(f_CPU * flashInterval) / prescaler; //calculation of "phi_max"
+	phi_max = (unsigned int)(F_CPU * flash_interval) / PRESCALER; //calculation of "phi_max"
 	TCNT1 = random(phi_max); //initialize the pacemaker with a random value
 
 	/*
@@ -156,7 +156,7 @@ void setup()
 	DDRC &= ~(1 << DDC1); //declaring PC1 (Analog Pin A1) as an Input
 
 	random_value = random(1000);
-	constant_flash_interval_offset = (double) mapFloat(randomValue, 0, 1000, -0.05, 0.05); //calculation of the constant flash_interval offset
+	constant_flash_interval_offset = (double) mapFloat(random_value, 0, 1000, -0.05, 0.05); //calculation of the constant flash_interval offset
 }
 
 void loop()
@@ -213,5 +213,5 @@ void loop()
 	flash_receive_C = HIGH;
 	flash_receive_D = HIGH;
 
-	millisecond_delay(IR_flash); //ensures that only one flash is recognized per cycle
+	millisecond_delay(IR_FLASH_LENGTH); //ensures that only one flash is recognized per cycle
 }
