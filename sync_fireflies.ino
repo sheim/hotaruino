@@ -16,7 +16,8 @@ the variables a, b, c and d are for the characteristics of f(phiRaw/phi_max)
 double x = 0; //state x --> x=f(phiRaw/phi_max) 
 char x_reset = 1; //the flash occurs after "x" exceeds "x_reset"
 double epsilon = 0.2; //coupling strength, the amount "x" gets lifted up if a flash is received
-double flash_interval = 3; //in s, the maximum timer value (phi_max) is calculated out of the the interval between two flashes --> biggest value is ~4s
+double constant_flash_interval = 3; //in s --> the firefly runs with this frequency if the mapped Potentiometer is 0
+double flash_interval = 0; //in s --> overall interval between flashes
 unsigned int phi_max = 0; //compare value for PHI_RAW, the maximum value Timer1 counts to
 
 char flash_receive_A = HIGH; //holds the value for PB1
@@ -107,6 +108,7 @@ void setup()
 
 	phi_max = (unsigned int)(F_CPU * flash_interval) / PRESCALER; //calculation of "phi_max"
 	TCNT1 = random(phi_max); //initialize the pacemaker with a random value
+	//this is just a rough estimation of the mmaximum value "phi_max"
 
 	/*
 	Initialize Timer2:
@@ -166,7 +168,7 @@ void loop()
 	*/
 
 	epsilon = mapFloat(analogRead(A0), 0, 1023, 0.01, 0.2); //reading in the analog value on pin PC0/A0 and map that value to a value between 0.01 and 0.2
-	flash_interval = mapFloat(analogRead(A1), 0, 1023, 0.5, 4) + constant_flash_interval_offset;
+	flash_interval = constant_flash_interval + mapFloat(analogRead(A1), 0, 1023, 0.5, 4) + constant_flash_interval_offset;
 	//reading in the new "flash_interval" from PC1/A1 and map it from 500ms to 4s and add the previous calculated (firefly specific) flash interval offset
 	phi_max = (unsigned int)((F_CPU * flash_interval) / PRESCALER); // calculate the new "phi_max" out of the new "flash_interval"
 
