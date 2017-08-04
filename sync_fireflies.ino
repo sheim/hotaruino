@@ -168,7 +168,7 @@ void loop()
 	*/
 
 	epsilon = mapFloat(analogRead(A0), 0, 1023, 0.01, 0.2); //reading in the analog value on pin PC0/A0 and map that value to a value between 0.01 and 0.2
-	flash_interval = constant_flash_interval + mapFloat(analogRead(A1), 0, 1023, 0.5, 4) + constant_flash_interval_offset;
+	flash_interval = constant_flash_interval + mapFloat(analogRead(A1), 0, 1023, -1, 1.5) + constant_flash_interval_offset;
 	//reading in the new "flash_interval" from PC1/A1 and map it from 500ms to 4s and add the previous calculated (firefly specific) flash interval offset
 	phi_max = (unsigned int)((F_CPU * flash_interval) / PRESCALER); // calculate the new "phi_max" out of the new "flash_interval"
 
