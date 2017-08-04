@@ -208,12 +208,12 @@ void loop()
 	if((flash_receive_A == 0) || (flash_receive_B == 0) || (flash_receive_C == 0) || (flash_receive_D == 0)) 
 	{
 		x += epsilon; //the current pacemaker point gets lifted about "epsilon"
+
+		millisecond_delay(IR_FLASH_LENGTH); //ensures that only one flash is recognized per cycle
 	}
 
 	flash_receive_A = HIGH; //ensure that the for the next round the flash receive is HIGH
 	flash_receive_B = HIGH;
 	flash_receive_C = HIGH;
 	flash_receive_D = HIGH;
-
-	millisecond_delay(IR_FLASH_LENGTH); //ensures that only one flash is recognized per cycle
 }
