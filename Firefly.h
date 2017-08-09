@@ -22,7 +22,7 @@ class Firefly
 		double x = 0; //state x --> x=f(phiRaw/phi_max)
     	char x_reset = 1; //the flash occurs after "x" exceeds "x_reset"
     	double epsilon = 0.1; //coupling strength, the amount "x" gets lifted up if a flash is received
-    	double constant_flash_interval = 0; //in s --> the firefly runs with this frequency if the mapped Potentiometer is 0
+    	double constant_flash_interval = 1.5; //in s --> the firefly runs with this frequency if the mapped Potentiometer is 0
     	double flash_interval = 0; //in s --> overall interval between flashes
     	unsigned int phi_max = 0; //compare value for PHI_RAW, the maximum value Timer1 counts to
 
