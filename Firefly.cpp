@@ -126,9 +126,38 @@ void Firefly::flashReceiveReset()
   	flash_receive_D = HIGH;
 }
 
+/*
+The "flashMirolloStrogatzModel"-function makes the flash that occurs in the mathematical model used from Renato E. Mirollo and Steven H. Strogatz
+in their Paper "Synchronization of Pulse-Coupled Biological Oszillators".
+*/
+
 void Firefly::flashMirolloStrogtzModel()
 {
+	int start_flash = millis();
+  	int current_time = millis();
 
+  	TCCR2B = 0b00000001; //setting the prescaler to "1"
+  	PORTB |= (1 << PB0); //light-up the visible LED
+
+  	//stretch the time in the loop to "flashLength"
+  	while((current_time - start_flash) <= VISIBLE_FLASH_LENGTH)
+  	{
+  		/*
+  		The IR-LED flashes only for 20ms because the processor of the other artificial fireflies is to fast. If the IR-LED flashes 200ms the others
+	    would recognize the same flash several times. Even 20ms are to long! Therefor is in the end that short delay of 20ms to ensure that roughly one flash
+   	 	is recognized.
+    	But the flash length of the IR-LED can't just be made smaller. It has to be at least 10ms because if the flash length is smaller it's not
+    	sure if the others recognize the flash!
+    	*/
+    	if((current_time - start_flash) >= IR_FLASH_LENGTH)
+    	{
+      		TCCR2B = 0; //clear the prescaler to stop flashing the IR-LED
+      		PHI_RAW = 0; //clear the recent value so that it start up from bottom if it is again activated
+    	}
+    	current_time = millis();
+  	}
+  	TCCR2B = 0; //ensure that the prescaler to stop flashing the IR-LED is cleared
+  	PORTB &= ~(1 << PB0); //kill the visible LED
 }
 
 void Firelfy::flashBuckPhaseAdvance()
