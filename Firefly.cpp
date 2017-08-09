@@ -87,9 +87,17 @@ void Firefly::millisecondDelay(int time_delay)
 	}
 }
 
+/*
+the "potetiometerReadIn"-function reads the values of the potentiometer and map the value to the right range vor the variable.
+It also calculates directly the new "phi_max" value!
+*/
+
 void Firefly::potentiometerReadIn()
 {
-
+	epsilon = mapFloat(analogRead(A0), 0, 1023, 0.01, 0.2); //reading in the analog value on pin PC0/A0 and map that value to a value between 0.01 and 0.2
+  	flash_interval = constant_flash_interval + mapFloat(analogRead(A1), 0, 1023, -1, 1.5) + constant_flash_interval_offset;
+  	//reading in the new "flash_interval" from PC1/A1, map it and add it to the constant interval then add the previous calculated (firefly specific) flash interval offset
+  	phi_max = (unsigned int)((F_CLK * flash_interval) / PRESCALER); // calculate the new "phi_max" out of the new "flash_interval"
 }
 
 void Firefly::flashReceiveCheck()
