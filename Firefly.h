@@ -40,9 +40,8 @@ class Firefly
     	void resetFlashReceive();
 
     	void flashMirolloStrogatzModel();
-    	void flashBuckPhaseAdvance();
-    	void flashBuckPhaseDelay();
-
+    	void flashBuckPhaseAdvanceAndDelay();
+    	
     	void receiveHandlerMirolloStrogatzModel();
     	void receiveHandlerBuckPhaseAdvance();
     	void receiveHandlerBuckPhaseDelay();

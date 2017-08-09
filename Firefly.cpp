@@ -165,7 +165,7 @@ The model of Buck includes the neural delay from the point at which the informat
 That delay is enormous important especially for the phase delay mechanism!!!
 */
 
-void Firelfy::flashBuckPhaseAdvance()
+void Firelfy::flashBuckPhaseAdvanceAndDelay()
 {
 	millisecondDelay(NEURAL_DELAY); //neuronal delay
 
@@ -195,11 +195,6 @@ void Firelfy::flashBuckPhaseAdvance()
 
   	TCCR2B = 0; //ensure that the prescaler is cleared to stop flashing the IR-LED
   	PORTB &= ~(1 << PB0); //kill the visible LED
-}
-
-void Firefly::flashBuckPhaseDelay()
-{
-
 }
 
 void Firefly::receiveHandlerMirolloStrogatzModel()
