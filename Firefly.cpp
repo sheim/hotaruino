@@ -72,9 +72,19 @@ Firefly::Firefly()
   DDRC &= ~(1 << DDC1); //declaring PC1 (Analog Pin A1) as an Input
 }
 
+/*
+The "millisecondDelay"-function is introduced to ensure that there is no change in the settings of Timer1 and Timer2!
+*/
+
 void Firefly::millisecondDelay(int time_delay)
 {
-
+	int start_time = millis();
+	int current_time = millis();
+	//staying in the loop until "time_delay" is over
+	while((current_time - start_time) >= _time_delay)
+	{
+		current_time = millis();
+	}
 }
 
 void Firefly::potentiometerReadIn()
