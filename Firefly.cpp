@@ -100,14 +100,30 @@ void Firefly::potentiometerReadIn()
   	phi_max = (unsigned int)((F_CLK * flash_interval) / PRESCALER); // calculate the new "phi_max" out of the new "flash_interval"
 }
 
+/*
+The "flashReceiveCheck"-function checks if a flash is received and saves that information to the flash_receive_x variable.
+This information is important for the flash handler!!!
+*/
+
 void Firefly::flashReceiveCheck()
 {
-
+	flash_receive_A = PINB & (1 << PB1); //saving the state if a flash is received or not for pin PB1.
+  	flash_receive_B = PINB & (1 << PB2); //saving the state if a flash is received or not for pin PB2.
+  	flash_receive_C = PINB & (1 << PB4); //saving the state if a flash is received or not for pin PB4.
+ 	flash_receive_D = PINB & (1 << PB5); //saving the state if a flash is received or not for pin PB5.
 }
+
+/*
+After a flash is received and processed the variable that contains the flash information have to be reseted so that on the next walkthrough of the
+loop-function the same process is not processed again!!!
+*/
 
 void Firefly::flashReceiveReset()
 {
-
+	flash_receive_A = HIGH; //ensure that the for the next round the flash receive is HIGH
+  	flash_receive_B = HIGH;
+  	flash_receive_C = HIGH;
+  	flash_receive_D = HIGH;
 }
 
 void Firefly::flashMirolloStrogtzModel()
