@@ -17,6 +17,8 @@
 class Firefly
 {
 	public:
+		Firefly();
+
 		double x = 0; //state x --> x=f(phiRaw/phi_max)
     	char x_reset = 1; //the flash occurs after "x" exceeds "x_reset"
     	double epsilon = 0.1; //coupling strength, the amount "x" gets lifted up if a flash is received
@@ -31,6 +33,21 @@ class Firefly
 
     	int random_value = 0; //holds later a random value for mapping noise to a "x" and the "flash_interval"
     	double constant_flash_interval_offset = 0; //random offset that not all fireflies flash with the same frequency
+
+    	void millisecondDelay(int timer_delay);
+    	void potentiometerReadIn();
+    	void flashReceiveCheck();
+    	void resetFlashReceive();
+
+    	void flashMirolloStrogatzModel();
+    	void flashBuckPhaseAdvance();
+    	void flashBuckPhaseDelay();
+
+    	void receiveHandlerMirolloStrogatzModel();
+    	void receiveHandlerBuckPhaseAdvance();
+    	void receiveHandlerBuckPhaseDelay();
+
+    	float mapFloat(float x, float in_min, float in_max, float out_min, float out_max);
 		
 };
 
