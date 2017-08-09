@@ -18,6 +18,8 @@ void setup()
 	firefly.phi_max = (unsigned int) ((F_CLK * firefly.constant_flash_interval) / PRESCALER);
 	//calculation roughly phi_max
 
+	PHI_RAW = random(firefly.phi_max); //after start up starting with a random phase to make it easier to start the fireflies out of synchronism
+
 	firefly.random_value = random(1000);
 	firefly.constant_flash_interval_offset = firefly.mapFloat(firefly.random_value, 0, 1023, -0.05, 0.05);
 	//assign a random mapped value as flash offset
@@ -25,5 +27,19 @@ void setup()
 
 void loop()
 {
-	
+	firefly.potentiometerReadIn(); //reading in the potentiometer states an calculation of the new phi_max
+
+	if(firefly.x <= firefly.x_reset)
+	{
+	    firefly.x = -a * exp(-(b / firefly.phi_max) * PHI_RAW) + c; //"x" gets it's new value according to x = f_phi
+	} else 
+	{
+	    //if x is bigger than x_reset than must a flash occur dependent on which mode is active
+	}
+
+	firefly.flashReceiveCheck(); //checking if other fierflies flashed
+	//the flash receive handler has to be coosen due to the synchronization mechanism that is activ
+
+
+	firefly.flashReceiveReset(); //reset all the received flashes that they arn't processed again.
 }
