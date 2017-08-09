@@ -213,9 +213,19 @@ void Firefly::receiveHandlerMirolloStrogatzModel()
   	}
 }
 
+/*
+The model from John Buck predict that only if the threshold (xReset - epsilon) is exceeded entrainment (phase shifting) can occur.
+ Before that threshold nothing happens!
+*/
+
 void Firefly::receiveHandlerBuckPhaseAdvance()
 {
-
+  	if(((flash_receive_A == 0) || (flash_receive_B == 0) || (flash_receive_C == 0) || (flash_receive_D == 0)) && (x + epsilon) >= x_reset)
+  	{
+  		 flashBuckPhaseAdvance(); //the corresponding flash model is called because the firelfy is foreced to flash
+   		 x = 0; //after that the pacemaker and the state x are reseted to start the cycle again
+  		 PHI_RAW = 0;
+  	}
 }
 
 void Firefly::receiveHandlerBuckPhaseDelay()
