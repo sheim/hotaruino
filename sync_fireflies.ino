@@ -14,6 +14,13 @@ void setup()
 
 	DDRD &= ~0xFF; //declaring PORT D as an Output
 	PORTD |= 0xFF; //activate the internal pull-ups
+
+	firefly.phi_max = (unsigned int) ((F_CLK * firefly.constant_flash_interval) / PRESCALER);
+	//calculation roughly phi_max
+
+	firefly.random_value = random(1000);
+	firefly.constant_flash_interval_offset = firefly.mapFloat(firefly.random_value, 0, 1023, -0.05, 0.05);
+	//assign a random mapped value as flash offset
 }
 
 void loop()
