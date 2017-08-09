@@ -12,8 +12,10 @@ void setup()
 	They are activated for the whole PORD D because that makes it much easier later to ask for the Switch state.
 	*/
 
-	DDRD &= ~0xFF; //declaring PORT D as an Output
-	PORTD |= 0xFF; //activate the internal pull-ups
+	DDRD &= ~(1 << PD2); //declaring PD2 as an Input
+	DDRD &= ~(1 << PD3); //declaring PD3 as an Input
+	DDRD &= ~(1 << PD4); //declaring PD4 as an Input
+	PORTD |= (1 << PD2) | (1 << PD3) | (1 << PD4); //activate the internal pull-ups
 
 	firefly.phi_max = (unsigned int) ((F_CLK * firefly.constant_flash_interval) / PRESCALER);
 	//calculation roughly phi_max
