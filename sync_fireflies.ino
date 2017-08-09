@@ -36,12 +36,49 @@ void loop()
 	    firefly.x = -a * exp(-(b / firefly.phi_max) * PHI_RAW) + c; //"x" gets it's new value according to x = f_phi
 	} else 
 	{
-	    //if x is bigger than x_reset than must a flash occur dependent on which mode is active
+	    /*
+	    if x is bigger than x_reset than must a flash occur dependent on which mode is activ. The swich states are counted through in binary.
+	    So if no switch is on the PIND-register lokks like that: PIND = 0b00011100 (that is state "0" and corresponds to the model from Mirollo and Strogatz)
+	    If the first switch is on it looks like this: PIND = 0b00011000 (that is state "1" and that corresponds to the phase advance mechanism)
+	    And so on: PIND = 0b00010100 (state "2" correspond to the phase delay mechanism)
+	    PIND = 0b00010000 (state "3")
+	    PIND = 0b00001100 (state "4")
+	    PIND = 0b00001000 (state "5")
+	    PIND = 0b00000100 (state "6")
+	    PIND = 0b00000000 (state "7")
+
+	    So 5 more mechanisms can be added to that model.
+	    */
+
+	    if(PIND & (1 << PD2) && PIND & (1 << PD3))
+	    {
+    		firefly.flashMirolloStrogatzModel();
+  		}
+  		else if(PIND & (1 << PD3))
+  		{
+    		firefly.flashBuckPhaseAdvanceAndDelay();
+  		}
+  		else if(PIND & (1 << PD2))
+  		{
+    		firefly.flashBuckPhaseAdvanceAndDelay();
+  		}
 	}
 
 	firefly.flashReceiveCheck(); //checking if other fierflies flashed
 	//the flash receive handler has to be coosen due to the synchronization mechanism that is activ
 
+	if(PIND & (1 << PD2) && PIND & (1 << PD3))
+	{
+   		firefly.receiveHandlerMirolloStrogatzModel();
+  	}
+  	else if(PIND & (1 << PD3))
+  	{
+    	firefly.receiveHandlerBuckPhaseAdvance();
+  	}
+  	else if(PIND & (1 << PD2))
+  	{
+    	firefly.receiveHandlerBuckPhaseDelay();
+  	}
 
 	firefly.flashReceiveReset(); //reset all the received flashes that they arn't processed again.
 }
