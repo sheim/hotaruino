@@ -3,6 +3,9 @@
 Firefly firefly(); //creating an object of the class Firefly that includes all necessary variable and functions
 //with the creation of that object all basic Timer and Output configurations are made
 
+char switch_state = 0;
+char old_switch_state = 0;
+
 void setup()
 {
 	/*
@@ -29,6 +32,20 @@ void setup()
 
 void loop()
 {
+	switch_state = (PIND & (1 << PD2)) + (PIND & (1 << PD3)) + (PIND & (1 << PD4)); 
+	//as state of the switch is represented through the sum of all single states
+
+	//if a switch is changed it is recognized in the beginnig and after that the whole process can go on with the new activated mechanism
+	if (old_switch_state != switch_state)
+	{
+		for (int i = 0; i < 6; i++)
+		{
+			PORTB ^= (1 << PB0);
+			firefly.millisecondDelay(100);
+		}//let the visible led flicker as recognition if the switch was used
+		old_switch_state = switch_state;
+	}
+
 	firefly.potentiometerReadIn(); //reading in the potentiometer states an calculation of the new phi_max
 
 	if(firefly.x <= firefly.x_reset)
