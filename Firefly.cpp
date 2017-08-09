@@ -220,17 +220,36 @@ The model from John Buck predict that only if the threshold (xReset - epsilon) i
 
 void Firefly::receiveHandlerBuckPhaseAdvance()
 {
+	//The IR-receiver has an internal pull-up resistor! So it's important to look for an LOW pin if a flash is received.
+
   	if(((flash_receive_A == 0) || (flash_receive_B == 0) || (flash_receive_C == 0) || (flash_receive_D == 0)) && (x + epsilon) >= x_reset)
   	{
-  		 flashBuckPhaseAdvance(); //the corresponding flash model is called because the firelfy is foreced to flash
-   		 x = 0; //after that the pacemaker and the state x are reseted to start the cycle again
-  		 PHI_RAW = 0;
+  		flashBuckPhaseAdvance(); //the corresponding flash model is called because the firelfy is foreced to flash
+   		x = 0; //after that the pacemaker and the state x are reseted to start the cycle again
+  		PHI_RAW = 0;
   	}
 }
 
 void Firefly::receiveHandlerBuckPhaseDelay()
 {
+	//The IR-receiver has an internal pull-up resistor! So it's important to look for an LOW pin if a flash is received.
 
+  	/*
+  	The Phase-Delay Synchronization model from John Buck is similar to the Phase-Advance Synchronization model with the exception that no flash occurs. Instead
+  	the pacemaker and the state "x" are resetted to basal line
+  	*/
+
+  	if((flash_receive_A == 0) || (flash_receive_B == 0) || (flash_receive_C == 0) || (flash_receive_D == 0) && ((x + epsilon) >= x_reset))
+  	{
+    	millisecondDelay(VISIBLE_FLASH_LENGTH);
+    	/*
+    	this delay is to balance the time between pacemaker reset and and the end of the recognized flash.
+    	that is important because if the delay isn't there the reseted firefly would start his pacemaker earier than the other. The result is that they won't
+    	synchronize.
+    	*/
+    	PHI_RAW = 0; //reset the pacemaker to start from basal line
+    	x = 0;
+  	}
 }
 
 float mapFloat(float x, float in_min, float in_max, float out_min, float out_max)
