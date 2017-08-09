@@ -118,7 +118,7 @@ After a flash is received and processed the variable that contains the flash inf
 loop-function the same process is not processed again!!!
 */
 
-void Firefly::flashReceiveReset()
+void Firefly::resetFlashReceive()
 {
 	flash_receive_A = HIGH; //ensure that the for the next round the flash receive is HIGH
   	flash_receive_B = HIGH;
@@ -131,7 +131,7 @@ The "flashMirolloStrogatzModel"-function makes the flash that occurs in the math
 in their Paper "Synchronization of Pulse-Coupled Biological Oszillators".
 */
 
-void Firefly::flashMirolloStrogtzModel()
+void Firefly::flashMirolloStrogatzModel()
 {
 	int start_flash = millis();
   	int current_time = millis();
@@ -165,7 +165,7 @@ The model of Buck includes the neural delay from the point at which the informat
 That delay is enormous important especially for the phase delay mechanism!!!
 */
 
-void Firelfy::flashBuckPhaseAdvanceAndDelay()
+void Firefly::flashBuckPhaseAdvanceAndDelay()
 {
 	millisecondDelay(NEURAL_DELAY); //neuronal delay
 
@@ -224,7 +224,7 @@ void Firefly::receiveHandlerBuckPhaseAdvance()
 
   	if(((flash_receive_A == 0) || (flash_receive_B == 0) || (flash_receive_C == 0) || (flash_receive_D == 0)) && (x + epsilon) >= x_reset)
   	{
-  		flashBuckPhaseAdvance(); //the corresponding flash model is called because the firelfy is foreced to flash
+  		flashBuckPhaseAdvanceAndDelay(); //the corresponding flash model is called because the firelfy is foreced to flash
    		x = 0; //after that the pacemaker and the state x are reseted to start the cycle again
   		PHI_RAW = 0;
   	}
@@ -257,7 +257,7 @@ The "mapFloat"-function recalculates a value from an specific range to an corres
 It's like the Arduino "map"-function.
 */
 
-float mapFloat(float x, float in_min, float in_max, float out_min, float out_max)
+float Firefly::mapFloat(float x, float in_min, float in_max, float out_min, float out_max)
 {
 	return (float)(x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }

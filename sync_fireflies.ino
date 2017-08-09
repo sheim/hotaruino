@@ -1,6 +1,6 @@
 #include "Firefly.h"
 
-Firefly firefly(); //creating an object of the class Firefly that includes all necessary variable and functions
+Firefly firefly; //creating an object of the class Firefly that includes all necessary variable and functions
 //with the creation of that object all basic Timer and Output configurations are made
 
 char switch_state = 0;
@@ -97,5 +97,5 @@ void loop()
     	firefly.receiveHandlerBuckPhaseDelay();
   	}
 
-	firefly.flashReceiveReset(); //reset all the received flashes that they arn't processed again.
+	firefly.resetFlashReceive(); //reset all the received flashes that they arn't processed again.
 }
