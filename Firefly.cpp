@@ -158,6 +158,10 @@ void Firefly::flashMirolloStrogatzModel()
   	}
   	TCCR2B = 0; //ensure that the prescaler to stop flashing the IR-LED is cleared
   	PORTB &= ~(1 << PB0); //kill the visible LED
+
+  	//after a flash the pacemaker has to be reseted to start a new cycle
+  	x = 0;
+  	PHI_RAW = 0;
 }
 
 /*
@@ -195,6 +199,10 @@ void Firefly::flashBuckPhaseAdvanceAndDelay()
 
   	TCCR2B = 0; //ensure that the prescaler is cleared to stop flashing the IR-LED
   	PORTB &= ~(1 << PB0); //kill the visible LED
+
+  	//after a flash the pacemaker has to be reseted to start a new cycle
+  	x = 0;
+  	PHI_RAW = 0;
 }
 
 /*
