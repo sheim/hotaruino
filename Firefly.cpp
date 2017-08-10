@@ -81,7 +81,7 @@ void Firefly::millisecondDelay(int time_delay)
 	int start_time = millis();
 	int current_time = millis();
 	//staying in the loop until "time_delay" is over
-	while((current_time - start_time) >= time_delay)
+	while((current_time - start_time) <= time_delay)
 	{
 		current_time = millis();
 	}
