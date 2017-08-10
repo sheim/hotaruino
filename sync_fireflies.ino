@@ -8,6 +8,7 @@ char old_switch_state = 0;
 
 void setup()
 {
+	firefly.timerAndPinConfiguration(); //call the configuration function to set Timer1 and Timer2 and the Outputs/Inputs properly
 	/*
 	The three pin Dil switch is attached to the Pins PD2 (Digital Pin 2), PD3 (Digital Pin 3) and PD4 (Digital Pin 4) 
 	to keep the Pins for the serial communication free.

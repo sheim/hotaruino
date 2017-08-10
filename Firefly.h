@@ -34,6 +34,7 @@ class Firefly
     	int random_value = 0; //holds later a random value for mapping noise to a "x" and the "flash_interval"
     	double constant_flash_interval_offset = 0; //random offset that not all fireflies flash with the same frequency
 
+    	void timerAndPinConfiguration();
     	void millisecondDelay(int timer_delay);
     	void potentiometerReadIn();
     	void flashReceiveCheck();
