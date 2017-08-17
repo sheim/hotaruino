@@ -50,18 +50,51 @@ void loop()
 
   	if(old_epsilon > (firefly.epsilon + 0.05) || old_epsilon < (firefly.epsilon - 0.05))
   	{//checking if the potentiometer for epsilon changed about the value 0.05 (0.05 is chosen to eliminate noise)
-  	  old_epsilon = firefly.epsilon;
-  	  Serial.println("Adjusted epsilon with the potentiometer."); 
-  	  Serial.println();
-  	  visibleInsuranceThatHardwareWork();
-  	  //show that the change is recognized via Serial comunication and the visible LED
+  	 	old_epsilon = firefly.epsilon;
+  		 Serial.println("Adjusted epsilon with the potentiometer."); 
+  	 	Serial.println();
+  	 	visibleInsuranceThatHardwareWork();
+  	 	//show that the change is recognized via Serial comunication and the visible LED
   	}
   	if(old_flash_interval > (firefly.flash_interval + 0.5) || old_flash_interval < (firefly.flash_interval - 0.5))
   	{//checking if the potentiometer for flash interval changed about the value 0.5 (0.5 is chosen to eliminate noise)
-  	  old_flash_interval = firefly.flash_interval;
-  	  Serial.println("Adjusted the flash interval with the potentiometer.");
-  	  Serial.println();
-  	  visibleInsuranceThatHardwareWork();
-  	  //show that the change is recognized
+  	 	old_flash_interval = firefly.flash_interval;
+  	 	Serial.println("Adjusted the flash interval with the potentiometer.");
+  	 	Serial.println();
+  	 	visibleInsuranceThatHardwareWork();
+  	 	//show that the change is recognized
   	}
+
+  	//checking if a IR-Flash is received from the IR-Receivers
+  	firefly.flashReceiveCheck();
+
+  	if(firefly.flash_receive_A == 0)
+  	{
+  		Serial.println("Receiver at PB1 (Digital Pin 9) recognized a flash.");
+ 	  	Serial.println();
+ 	  	visibleInsuranceThatHardwareWork();
+ 	  	//show that the Receiver at Pin PB1 received a flash
+ 	}
+ 	if(firefly.flash_receive_B == 0)
+ 	{
+ 		Serial.println("Receiver at PB2 (Digital Pin 10) recognized a flash.");
+ 		Serial.println();
+ 		visibleInsuranceThatHardwareWork();
+ 		//show that the Receiver at Pin PB2 received a flash
+	}
+ 	if(firefly.flash_receive_C == 0)
+ 	{
+		Serial.println("Receiver at PB4 (Digital Pin 12) recognized a flash.");
+ 		Serial.println();
+		visibleInsuranceThatHardwareWork();
+		//show that the Receiver at Pin PB4 received a flash
+	}
+ 	if(firefly.flash_receive_D == 0)
+ 	{
+ 		Serial.println("Receiver at PB5 (Digital Pin 13) recognized a flash.");
+  		Serial.println();
+  		visibleInsuranceThatHardwareWork();
+  		//show that the Receiver at Pin PB5 received a flash
+ 	}
+
 }
