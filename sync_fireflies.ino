@@ -1,3 +1,14 @@
+/*
+Author: Jonas Lang
+Date: 17.08.2017
+
+This is the main file that simulates the virtual firefly. 
+Because of the three way switch used on the shield up to 8 different variations or mechanisms can be programmed.
+Right now this code contains 3 different synchronization mechanisms. The models are the mathematical mode Renato E. Mirollo and Steven H. Strogtz
+used in their paper "Synchronization of Pulse-Coupled Biological Oszillators" and the phase-advance synchronization model
+and phase-delay synchronization model proposed from John Buck.
+*/
+
 #include "Firefly.h"
 
 Firefly firefly; //creating an object of the class Firefly that includes all necessary variable and functions

@@ -1,3 +1,10 @@
+/*
+Author: Jonas Lang
+Date: 17.08.2017
+
+The Firefly.h file contains all the proto functions for the virtual firefly. This file have to be added later to access the functions in Firefly.cpp
+*/
+
 #ifndef Firefly_h
 #define Firefly_h
 

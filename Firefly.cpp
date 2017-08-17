@@ -1,3 +1,11 @@
+/*
+Author: Jonas Lang
+Date: 17.08.2017
+
+The Firefly.cpp file contains the code that can be called later in the main file. The purpose of this file is to make the main code shorter and easier
+to read.
+*/
+
 #include "Arduino.h"
 #include "Firefly.h"
 

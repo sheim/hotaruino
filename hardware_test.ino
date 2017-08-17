@@ -1,3 +1,17 @@
+/*
+Author: Jonas Lang
+Date: 17.08.2017
+
+This file can be used to test the hardware of the firefly if the soldering process is done.
+If the Arduino IDE is available the Serial monitor can be opend to get the the information of the hardware. If the Arduino IDE is not available
+just load the program and watch the visible LED. It blinks if the potentiometer or the switches are changed or of a flash is received by the receiver.
+
+To test the hardware just switch the switches or turn the potentiometer and observe the LED or the Serial monitor.
+The IR-receivers can be testet with any remote control. 
+
+Don't make the changes to fast!!!
+*/
+
 #include "Firefly.h"
 
 Firefly firefly; //creating a new object of class Firefly
