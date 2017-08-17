@@ -37,5 +37,22 @@ void setup()
 
 void loop()
 {
-	
+	firefly.potentiometerReadIn(); //updating the potentiometer values
+
+  	if(old_epsilon > (firefly.epsilon + 0.05) || old_epsilon < (firefly.epsilon - 0.05))
+  	{//checking if the potentiometer for epsilon changed about the value 0.05 (0.05 is chosen to eliminate noise)
+  	  old_epsilon = firefly.epsilon;
+  	  Serial.println("Adjusted epsilon with the potentiometer."); 
+  	  Serial.println();
+  	  visibleInsuranceThatHardwareWork();
+  	  //show that the change is recognized via Serial comunication and the visible LED
+  	}
+  	if(old_flash_interval > (firefly.flash_interval + 0.5) || old_flash_interval < (firefly.flash_interval - 0.5))
+  	{//checking if the potentiometer for flash interval changed about the value 0.5 (0.5 is chosen to eliminate noise)
+  	  old_flash_interval = firefly.flash_interval;
+  	  Serial.println("Adjusted the flash interval with the potentiometer.");
+  	  Serial.println();
+  	  visibleInsuranceThatHardwareWork();
+  	  //show that the change is recognized
+  	}
 }
