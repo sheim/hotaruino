@@ -11,6 +11,15 @@ double noise_flash_interval = 0;
 char switch_state = 0;
 char old_switch_state = 0;
 
+void visibleInsuranceThatHardwareWork()
+{
+	for (int i = 0; i < 6; i++)
+	{
+		PORTB ^= (1 << PB0); //toggle the visible LED
+		firefly.misslisecondDelay(100);
+	}
+}
+
 void setup()
 {
 	Serial.begin(9600); //starting the serial communication
