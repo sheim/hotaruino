@@ -97,4 +97,47 @@ void loop()
   		//show that the Receiver at Pin PB5 received a flash
  	}
 
+ 	firefly.resetFlashReceive();
+ 	//reset the values of the receiver to prevent that they're processed again
+
+ 	switch_state = (PIND & (1 << PD2)) + (PIND & (1 << PD3)) + (PIND & (1 << PD4));
+ 	if (switch_state != old_switch_state)
+ 	{
+ 		old_switch_state = switch_state;
+ 		if(PIND & (1 << PD2)) //check the state of the Switch
+ 		{
+ 			Serial.println("Switch 1 is off.");
+      		Serial.println();
+      		visibleInsuranceThatHardwareWork();
+ 		}else
+ 		{
+ 			Serial.println("Switch 1 is on.");
+      		Serial.println();
+      		visibleInsuranceThatHardwareWork();
+ 		}//show that the state of Pin PD2 changed
+
+ 		if(PIND & (1 << PD3)) //check the state of the Switch
+ 		{
+ 			Serial.println("Switch 2 is off.");
+      		Serial.println();
+      		visibleInsuranceThatHardwareWork();
+ 		}else
+ 		{
+ 			Serial.println("Switch 2 is on.");
+      		Serial.println();
+      		visibleInsuranceThatHardwareWork();
+ 		}//show that the state of Pin PD3 changed
+
+ 		if(PIND & (1 << PD4)) //check the state of the Switch
+ 		{
+ 			Serial.println("Switch 3 is off.");
+      		Serial.println();
+      		visibleInsuranceThatHardwareWork();
+ 		}else
+ 		{
+ 			Serial.println("Switch 3 is on.");
+      		Serial.println();
+      		visibleInsuranceThatHardwareWork();
+ 		}//show that the state of Pin PD4 changed
+ 	}
 }
