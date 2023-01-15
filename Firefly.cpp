@@ -173,6 +173,22 @@ void Firefly::flashMirolloStrogatzModel()
 }
 
 /*
+The flash receive handler handles the necessary actions if a flash is received after the model of Mirollo and Strogatz.S
+*/
+
+void Firefly::receiveHandlerMirolloStrogatzModel()
+{
+	//The IR-receiver has an internal pull-up resistor! So it's important to look for an LOW pin if a flash is received.
+
+  	if((flash_receive_A == 0) || (flash_receive_B == 0) || (flash_receive_C == 0) || (flash_receive_D == 0))
+  	{
+    	x += epsilon; //the current pacemaker point gets lifted about "epsilon"
+
+    	millisecondDelay(IR_FLASH_LENGTH); //ensures that only one flash is recognized per cycle
+  	}
+}
+
+/*
 The model of Buck includes the neural delay from the point at which the information that a flash should occur to the visible flash.
 That delay is enormous important especially for the phase delay mechanism!!!
 */
@@ -211,22 +227,6 @@ void Firefly::flashBuckPhaseAdvanceAndDelay()
   	//after a flash the pacemaker has to be reseted to start a new cycle
   	x = 0;
   	PHI_RAW = 0;
-}
-
-/*
-The flash receive handler handles the necessary actions if a flash is received after the model of Mirollo and Strogatz.S
-*/
-
-void Firefly::receiveHandlerMirolloStrogatzModel()
-{
-	//The IR-receiver has an internal pull-up resistor! So it's important to look for an LOW pin if a flash is received.
-
-  	if((flash_receive_A == 0) || (flash_receive_B == 0) || (flash_receive_C == 0) || (flash_receive_D == 0))
-  	{
-    	x += epsilon; //the current pacemaker point gets lifted about "epsilon"
-
-    	millisecondDelay(IR_FLASH_LENGTH); //ensures that only one flash is recognized per cycle
-  	}
 }
 
 /*

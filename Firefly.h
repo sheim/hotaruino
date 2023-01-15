@@ -33,6 +33,8 @@ class Firefly
     	double flash_interval = 0; //in s --> overall interval between flashes
     	unsigned int phi_max = 0; //compare value for PHI_RAW, the maximum value Timer1 counts to
 
+        double frequency = 0.5;
+
     	char flash_receive_A = 1; //holds the value for PB1 --> since it's a digital input the value can be either 0 or 1
     	char flash_receive_B = 1; //holds the value for PB2
     	char flash_receive_C = 1; //holds the value for PB4
