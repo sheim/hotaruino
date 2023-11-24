@@ -17,13 +17,9 @@ The Firefly.h file contains all the proto functions for the virtual firefly. Thi
 #define F_CLK 16000000 //clock frequency
 #define PRESCALER 1024 //the PRESCALER for Timer1 (it's set in the TCCR1B register)
 #define PHI_RAW TCNT1 //the value of the Timer1 is used as the phase variable phi
-#define VISIBLE_FLASH_LENGTH 100 //in ms --> flashing time ot the visible LED
+#define VISIBLE_FLASH_LENGTH 200 //in ms --> flashing time ot the visible LED
 #define IR_FLASH_LENGTH 20 //in ms --> flashing time of the IR-LED
-#define IR_FLASH_BLIND 40 // keep the IR receiver blind during IR_FLASH_LENGTH + IR_FLASH_BLIND, to avoid seeing its own flash.
 #define NEURAL_DELAY 100 //the flash signal needs that time to get to the abdomen
-
-#define PREC 1000
-#define MAX_RESET_X 250
 
 class Firefly
 {
@@ -36,10 +32,6 @@ class Firefly
     	double constant_flash_interval = 1.5; //in s --> the firefly runs with this frequency if the mapped Potentiometer is 0
     	double flash_interval = 0; //in s --> overall interval between flashes
     	unsigned int phi_max = 0; //compare value for PHI_RAW, the maximum value Timer1 counts to
-
-        double frequency = 0.5;
-        bool flash_not_yet_seen = false;
-        bool flash_received = false;
 
     	char flash_receive_A = 1; //holds the value for PB1 --> since it's a digital input the value can be either 0 or 1
     	char flash_receive_B = 1; //holds the value for PB2
